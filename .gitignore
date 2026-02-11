@@ -9,3 +9,7 @@ __pycache__/
 .pytest_cache/
 test-data/
 *.tmp
+
+# Archive exclusion
+archive/*
+!archive/.gitkeep
