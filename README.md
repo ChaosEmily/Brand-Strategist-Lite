@@ -1,9 +1,39 @@
-# Project Name
+# Brand Strategist Lite
 
-## Quick Start
+一個為新創企業與個人品牌設計的輕量化定位工具。自動化 3C 框架分析（Customer, Competitor, Corporation），協助您從功能面建立護城河。
 
-## Installation
+## 核心功能 (Features)
 
-## Usage
+- **3C 框架整合**：系統化涵蓋用戶需求（Customer）、市場供給（Competitor）與自身能力（Corporation）。
+- **量化競爭矩陣**：支援最多 3 個品牌並行比對，自動計算 **Max Gap** 與機會分數 ($O$)。
+- **功能護城河識別**：優先從產品/服務規格找出差異化點，而非僅依賴品牌個性。
+- **品牌原型自動對映**：基於 3C 分析邏輯，自動推導最適合的品牌人格（如：智者、英雄等）。
+- **自動化存檔**：系統化紀錄每次分析迭代，方便追蹤策略演進。
 
-## Documentation
+## 操作說明 (Usage)
+
+### 1. 資料輸入階段
+在對話框中輸入以下指令來備齊分析素材：
+- **/add-competitor**：新增競爭對手名稱與官方網址。
+- **/add-interview**：匯入用戶訪談筆記（支援直接貼上文字或讀取檔案）。
+- **/add-brand-info**：設定您品牌目前的使命、價值觀與核心產品。
+
+### 2. 執行策略分析
+當資料備齊後，輸入以下指令啟動全自動分析：
+- **/brand-run**：**🚀 推薦使用**。一鍵執行從用戶洞察到最終策略生成的全流程。
+
+您也可以手動執行分段分析：
+- **/brand-user**：產出用戶需求洞察報告。
+- **/brand-comp**：產出競爭對手分析矩陣。
+- **/brand-strat**：產出最終品牌定位策略。
+
+### 3. 報告存檔
+完成分析後，建議執行：
+- **/archive-reports**：將目前的報告移至 `archive/` 資料夾，保持工作區整潔。
+
+## 目錄結構
+- `config/`: 設定檔（如競品清單）。
+- `stage_1_user_insights/`: 用戶訪談原始資料。
+- `stage_2_market_analysis/`: 自動生成之分析報告副本。
+- `archive/`: 歷史分析結果存檔。
+- `brand-strategist-lite/`: 系統核心腳本與參考指南。
