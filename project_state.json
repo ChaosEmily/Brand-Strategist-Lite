@@ -1,0 +1,23 @@
+{
+  "last_updated": "2026-02-15T00:04:11.076781",
+  "status": "initialized",
+  "inputs": {
+    "competitor_urls": [
+      "https://example.com/competitor1",
+      "https://example.com/competitor2",
+      "https://www.fragrantica.asia/about-us.phtml"
+    ],
+    "interviews": [],
+    "brand_info": null
+  },
+  "analysis_outputs": {
+    "user_insights_report": null,
+    "competitor_analysis_report": null,
+    "final_strategy_report": null
+  },
+  "crawled_data": [
+    "stage_2_market_analysis\\competitors\\example_com_0.json",
+    "stage_2_market_analysis\\competitors\\example_com_1.json",
+    "stage_2_market_analysis\\competitors\\www_fragrantica_asia_2.json"
+  ]
+}

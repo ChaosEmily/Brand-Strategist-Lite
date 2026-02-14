@@ -12,15 +12,16 @@ A lightweight brand positioning tool designed for startup teams. It integrates *
 
 1.  **Install Dependencies**:
     ```bash
-    pip install requests beautifulsoup4
+    pip install playwright
+    playwright install
     ```
 
 2.  **Setup Competitors**:
-    Add URLs to `config/targets.json`.
+    Add URLs to `config/targets.json` or use `/add-competitor`.
 
 3.  **Run Crawler**:
     ```bash
-    python brand-strategist-lite/scripts/competitor_crawler.py config/targets.json
+    python brand-strategist-lite/scripts/competitor_crawler.py state
     ```
 
 4.  **Analyze (One-Click)**:

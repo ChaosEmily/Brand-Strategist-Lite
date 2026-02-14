@@ -4,14 +4,18 @@ description: Analyze competitor data to generate the Competitor Analysis Report 
 
 # Workflow: Competitor Analysis
 
-1.  **Data Collection**: Read up to 3 files in `stage_2_market_analysis/competitors/`.
-2.  **Product & Service Analysis**: 
-    -   Extract functional specifications for each brand.
-    -   Identify functional differentiation for each brand.
-3.  **Bain 30 Mapping ($S_c$)**:
-    -   Map each competitor's features to Bain 30 elements.
-    -   Assign individual **Competitor Scores** (Comp A, Comp B, Comp C) (1-10).
-4.  **Brand Archetype Mapping**: 
-    -   Analyze each competitor's identity.
-    -   Identify Primary/Secondary Archetypes for each with Evidence.
-5.  **Output**: Save to `stage_2_market_analysis/Competitor_Analysis.md` following the Master Template in `framework_details.md`.
+// turbo-all
+1.  Check input data (Competitor URLs):
+    ```bash
+    python brand-strategist-lite/scripts/state_manager.py check competitor_analysis
+    ```
+2.  Crawl competitor websites (if check passed):
+    ```bash
+    python brand-strategist-lite/scripts/competitor_crawler.py state
+    ```
+3.  Analyze the data and generate the report:
+    -   Read `stage_2_market_analysis/competitors/*.json`.
+    -   Compare features using the 3C expanded matrix.
+    -   Calculate Opportunity Score ($O$).
+    -   Save to `stage_2_market_analysis/Competitor_Analysis.md` following the Master Template in `framework_details.md`.
+```

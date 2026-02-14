@@ -2,13 +2,18 @@
 description: Analyze user interview data to generate the User Insight Report (Customer aspect of 3C).
 ---
 
-# Workflow: User Insight Analysis
+# Workflow: User Insights Analysis
 
-1.  **Data Collection**: Read all files in `stage_1_user_insights/interviews/`.
-2.  **JTBD Extraction**: 
-    -   Identify Functional Jobs (practical tasks).
-    -   Identify Emotional Jobs (inner feelings).
-    -   Identify Social Jobs (external perception).
+// turbo-all
+1.  Check input data (Interviews):
+    ```bash
+    python brand-strategist-lite/scripts/state_manager.py check user_analysis
+    ```
+2.  Analyze user interview notes:
+    -   Read all files in `stage_1_user_insights/interviews/`.
+    -   Extract Pain Points, Gain Points, and Key Purchasing Drivers (KPD).
+    -   Identify unfulfilled needs.
+    -   Save to `stage_2_market_analysis/User_Insights_Report.md`.
     -   Draft a JTBD Statement: "When I [context], I want to [motivation], so I can [outcome]."
 3.  **Bain 30 Mapping ($W_u$)**:
     -   Refer to `brand-strategist-lite/references/framework_details.md` for elements.
