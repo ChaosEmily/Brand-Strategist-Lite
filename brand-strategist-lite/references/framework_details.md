@@ -30,10 +30,9 @@ These elements fall into four categories, from functional to life-changing.
 - Reduces anxiety
 - Rewards me
 - Nostalgia
-- Design/Aesthetics
+- Visual appeal
 - Badge value
 - Wellness
-- Therapeutic value
 - Fun/Entertainment
 - Attractiveness
 - Provides access
