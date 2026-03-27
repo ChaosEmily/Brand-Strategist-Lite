@@ -1,53 +1,67 @@
 ---
 name: brand-strategist-lite
-description: A lightweight brand positioning tool for startups, automating competitor analysis and guiding users through JTBD, Bain 30, and Brand Archetypes frameworks.
+description: A human-in-the-loop brand positioning tool that separates data extraction, human scoring, mechanical analysis, and strategic options into four transparent layers.
+version: 2.0.0
 ---
 
 # Brand Strategist Lite
 
-This skill guides the user through a brand strategy process.
+This skill guides the user through a four-layer brand strategy process where AI handles structuring and the human handles all scoring and decisions.
 
 ## Capabilities
-- **3C Framework Integration**: Holistic brand strategy covering Customer (Demand), Competitor (Supply), and Corporation (Capability).
-- **Expanded 3C Competitive Matrix**: Quantitative side-by-side comparison of up to 3 competitors with **Max Gap** and Opportunity Score ($O$) calculation.
-- **Functional Moat Identification**: Prioritizing product/service specs over personality to find true differentiation.
-- **Psychological Archetype Mapping**: Deriving brand personality directly from 3C interaction (The "Wise Butler" logic).
-- **Report Archiving**: Systematic storage of historical analysis iterations.
+
+- **Layer 1 — JTBD Extraction**: AI extracts Jobs to be Done from interviews; user confirms and selects top 3-5 Jobs.
+- **Layer 2 — Bain 30 Scoring**: AI suggests relevant value elements; user scores importance ($W_u$) and delivery ($S_c$, $S_{corp}$) with evidence.
+- **Layer 3 — 3C Matrix Computation**: Deterministic gap analysis with no AI involvement. Same inputs always produce same outputs.
+- **Layer 4 — Positioning Options**: AI generates 2-3 positioning options with evidence, archetypes, and risks; user chooses direction.
+
+## Design Principles
+
+1. **AI structures, human judges**: All scores and decisions come from the user.
+2. **Traceable**: Every score links to at least one evidence source.
+3. **Reproducible**: Layer 3 is pure math — deterministic and verifiable.
+4. **Options, not answers**: Final output is 2-3 choices, not a single conclusion.
 
 ## Usage
 
-### Step 1: Configuration
-1. Edit `config/targets.json` to include competitor URLs.
-2. Place user interview notes in `stage_1_user_insights/interviews/` (text or markdown files).
+### Step 1: Input Data
 
-### Step 2: Input Data (Interactive Workflows)
-Start by telling the AI about your brand, users, and competitors. Use these commands to add data:
+- **/add-interview**: Import user interview notes (minimum 3, covering ≥2 customer segments).
+- **/add-competitor**: Add competitor name and information sources.
+- **/add-brand-info**: Define your brand mission, values, and product description.
 
-- 🆕 **/add-competitor**: Add a new competitor website to analyze.
-- 🆕 **/add-interview**: Add user interview notes (supports text paste or file import).
-- 🆕 **/add-brand-info**: Add your own brand mission/values (supports text or file).
+### Step 2: Execute Analysis
 
-### Step 3: Execute Analysis (Slash Commands)
-To generate the full strategy report, simply type the following command in the chat:
+- **/brand-run**: Full guided workflow (with human confirmation at each layer).
 
-> **/brand-run**
+Or run individual layers:
 
-Alternatively, you can run individual steps:
-- **User Analysis**: `/brand-user`
-- **Competitor Analysis**: `/brand-comp`
-- **Strategy Generation**: `/brand-strat`
-- **Archive Reports**: `/archive-reports`
+- **/brand-user**: Layer 1 — JTBD extraction and confirmation.
+- **/brand-comp**: Layer 2 — Dimension selection and human scoring.
+- **/brand-strat**: Layers 3-4 — Matrix computation and positioning options.
+- **/archive-reports**: Archive current reports.
+
+## Quality Gates
+
+| Layer | Gate Condition |
+| :--- | :--- |
+| 1 | ≥3 interviews; each Job must appear in ≥2 different interviews |
+| 2 | Every score requires evidence; empty evidence marks score as "unverified" |
+| 3 | None (deterministic math) |
+| 4 | User must explicitly choose a direction before strategy is expanded |
 
 ## Output
-The analysis results will be saved in `stage_2_market_analysis/`:
-- `User_Insights_Report.md`
-- `Competitor_Analysis.md`
-- `Final_Brand_Strategy.md`
+
+- `stage_2_market_analysis/User_Insights_Report.md` — Confirmed JTBD with source quotes
+- `stage_2_market_analysis/Scoring_Matrix.md` — Human-scored matrix with evidence
+- `stage_3_strategy_generation/Positioning_Options.md` — 2-3 options with tradeoffs
+- `stage_3_strategy_generation/Final_Strategy.md` — Expanded strategy for chosen direction
 
 ## Directory Structure
+
 - `config/`: Configuration files.
-- `brand-strategist-lite/scripts/`: Python scripts for automation.
-- `branded-strategist-lite/references/`: Framework definitions and templates.
+- `brand-strategist-lite/scripts/`: Python automation scripts.
+- `brand-strategist-lite/references/`: Framework definitions and templates.
 - `stage_1_user_insights/`: Input directory for user interviews.
-- `stage_2_market_analysis/`: Output directory for competitor data and final reports.
-- `brand-strategist-lite/`: Skill definition and documentation.
+- `stage_2_market_analysis/`: Scoring matrices and analysis reports.
+- `stage_3_strategy_generation/`: Positioning options and final strategy.

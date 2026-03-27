@@ -1,131 +1,159 @@
 ---
 name: brand-strategist-lite
-description: A lightweight brand positioning tool for startups, automating competitor analysis and guiding users through JTBD, Bain 30, and Brand Archetypes frameworks.
-version: 1.0.0
+description: A human-in-the-loop brand positioning tool that separates data extraction, human scoring, mechanical analysis, and strategic options into four transparent layers.
+version: 2.0.0
 ---
 
 # Brand Strategist Lite
 
-Brand Strategist Lite is a specialized AI agent skill designed to help startups and personal brands define their strategic positioning. It utilizes the **3C Framework** (Customer, Competitor, Corporation) to create a comprehensive brand strategy that is actionable and defensible.
+Brand Strategist Lite 是一個以「人類判斷為核心」的品牌定位工具。它將品牌策略流程拆為四層，每一層有明確的輸入、輸出與品質閘門，確保結論可溯源、可重現、無黑箱。
 
-## 🚀 Key Features
+## 設計原則
 
-- **3C Framework Integration**: Systematically analyzes User Insights (Customer), Market Landscape (Competitor), and Internal Capabilities (Corporation).
-- **Quantitative Competitive Matrix**: Compares your brand against up to 3 competitors using a scoring system to identify **Max Gap** and Opportunity Score ($O$).
-- **Functional Moat Identification**: Focuses on finding differentiation in product specifications and service levels, not just "brand vibes".
-- **Automated Archetype Mapping**: Derives the most suitable Brand Archetype (e.g., Sage, Hero, Creator) based on the analytical results.
-- **Automated Reporting**: Generates structured Markdown reports for every stage of the analysis.
+1. **AI 負責結構化，人負責判斷**：AI 提取與整理資料，所有評分與決策由使用者完成。
+2. **每個結論都可溯源**：每個分數必須綁定至少一個證據來源（訪談引述或可驗證事實）。
+3. **可重現**：同樣的輸入與評分，永遠產出同樣的分析結果。
+4. **選項而非答案**：最終產出 2-3 個定位選項，由使用者選擇，不給「唯一正確答案」。
 
-## 📂 System Structure
+## 四層架構
 
-The skill is organized as follows:
+### Layer 1：JTBD 資料萃取（AI 執行，人確認）
+
+**目的**：從訪談中提取使用者要完成的任務（Jobs to be Done）。
+
+**流程**：
+
+1. 使用者提供訪談紀錄（最少 3 份，涵蓋 ≥2 個客群）
+2. AI 逐字提取相關段落，歸類為 Functional / Emotional / Social Job
+3. 使用者確認或修正分類結果
+4. 使用者從中勾選最重要的 3-5 個 Jobs
+
+**產出**：確認過的 Job 清單，每個 Job 附原始訪談引述。
+
+**品質閘門**：
+
+- 訪談 < 3 份 → 拒絕往下走
+- 每個 Job 至少 2 份不同訪談提到 → 避免單一受訪者偏見
+
+### Layer 2：Bain 30 篩選與人工評分（AI 建議，人評分）
+
+**目的**：將 Layer 1 的 Jobs 轉為可量化的評估維度，由使用者對自己與競品打分。
+
+**流程**：
+
+1. **篩選維度**：AI 根據 Jobs 從 Bain 30 中建議 8-10 個相關元素，使用者確認增刪
+2. **使用者打重要性分數（$W_u$ 1-10）**：每個元素對客戶有多重要，附訪談依據
+3. **使用者打交付分數（$S_c$, $S_{corp}$ 1-10）**：自己與競品各打分，附事實依據
+
+**產出**：完整評分矩陣，每格都有溯源依據。
+
+**品質閘門**：
+
+- 依據欄為空的分數 → 標記為「待驗證」，不參與計算
+- AI 可建議分數，但必須附上事實依據，使用者有最終決定權
+
+### Layer 3：3C Matrix 運算（純數學，無 AI 介入）
+
+**目的**：用 Layer 2 的分數做確定性計算，找出優勢區與機會區。
+
+**計算規則**：
+
+- **Gap** = $S_{corp}$ − Max($S_c$)（正數 = 我們贏）
+- **優勢區** = $W_u$ ≥ 7 且 Gap > 0
+- **機會區** = $W_u$ ≥ 7 且 Gap < 0
+- **低優先** = $W_u$ < 5
+
+**產出**：優勢區 / 機會區 / 低優先清單。
+
+**注意**：不使用加權公式，改用分類規則。同樣的輸入永遠產出同樣的結果。
+
+### Layer 4：定位選項與溝通策略（AI 輔助，人決策）
+
+**目的**：根據 Layer 3 結果，提出可選的品牌定位方向。
+
+**流程**：
+
+1. AI 根據優勢區生成 2-3 個定位選項
+2. 每個選項包含：
+   - 主打元素與支持證據
+   - 適合的 Brand Archetype（作為溝通語言選項，非唯一答案）
+   - 風險與前提條件
+3. 使用者選擇方向
+4. AI 展開具體溝通策略（調性、文案方向、視覺關鍵字）
+
+**產出**：使用者選定的定位方向 + 展開的溝通策略。
+
+## 框架因果鏈
 
 ```text
-d:\Projects\Brand Strategist Lite\
-├── brand-strategist-lite/      # Core skill definitions and scripts
-│   ├── scripts/                # Python automation scripts
-│   │   ├── competitor_crawler.py # Basic web scraper
-│   │   └── archive_reports.py    # Archiving utility
-│   ├── COMMANDS.md             # Detailed command reference
-│   └── SKILL.md                # Internal reference
-├── config/                     # Configuration files
-│   └── targets.json            # Competitor URLs and settings
-├── stage_1_user_insights/      # Input: User interview notes & raw data
-├── stage_2_market_analysis/    # Output: Generated analysis reports
-├── stage_3_strategy_generation/# Output: Final strategy documents
-├── stage_3_strategy_generation/# Output: Final strategy documents
-├── archive/                    # Archived historical reports
-├── project_state.json          # [NEW] Central state file required for analysis
-├── README.md                   # General project info
-└── SKILL.md                    # This documentation file
+JTBD（使用者要完成什麼任務？）
+  ↓ 決定評估維度
+Bain 30（在這些任務上，各品牌的價值交付如何？）
+  ↓ 產出量化比較
+3C Matrix（誰在哪裡強、哪裡弱？缺口在哪？）
+  ↓ 識別定位機會
+Archetype（用什麼人格調性去溝通這個定位？）
 ```
 
-## 🛠️ Installation & Setup
+每一層的輸入嚴格來自上一層的輸出，不跳級、不混用。
 
-1.  **Prerequisites**:
-    -   Python 3.8+ installed.
-    -   Required Python packages: `playwright`.
-    -   (Install via: `pip install playwright`, then `playwright install chromium`)
+## 目錄結構
 
-2.  **Configuration**:
-    -   Edit `config/targets.json` to define your competitor list if you wish to bypass the interactive commands.
+```text
+Brand Strategist Lite/
+├── brand-strategist-lite/      # 核心技能定義與腳本
+│   ├── scripts/                # Python 自動化腳本
+│   ├── references/             # 框架定義與模板
+│   ├── COMMANDS.md             # 指令速查表
+│   ├── SKILL.md                # 內部參考
+│   └── README.md               # 英文說明
+├── config/                     # 設定檔
+│   └── targets.json            # 競品清單
+├── stage_1_user_insights/      # 輸入：訪談原始資料
+├── stage_2_market_analysis/    # 輸出：評分矩陣與分析報告
+├── stage_3_strategy_generation/# 輸出：定位選項與策略文件
+├── archive/                    # 歷史分析存檔
+├── README.md                   # 中文使用說明
+└── SKILL.md                    # 本文件
+```
 
-## 💻 Usage Guide (Slash Commands)
+## 指令一覽
 
-This skill is operated primarily through **Slash Commands** in the chat interface.
+### 資料輸入
 
-### 1. Data Collection Phase
-Before running the full analysis, you need to feed the system with data.
-
-| Command | Description |
+| 指令 | 功能 |
 | :--- | :--- |
-| **/add-competitor** | Interactive guide to add a competitor's name and URL. Updates `config/targets.json`. |
-| **/add-interview** | Import user interview notes. You can paste text directly or provide a file path to a transcript. Saved to `stage_1_user_insights/`. |
-| **/add-brand-info** | Define your brand's mission, values, and core product offerings. Crucial for the "Corporation" aspect of the 3C analysis. |
+| **/add-interview** | 匯入用戶訪談紀錄 |
+| **/add-competitor** | 新增競品名稱與資訊來源 |
+| **/add-brand-info** | 設定品牌使命、價值觀與產品描述 |
 
-### 1. **全自動分析 (One-Click Strategy)**
-- **指令**: `/brand-run`
-- **功能**: **自動檢查資料完整性**，然後依序執行：使用者分析 $\rightarrow$ 競品分析 $\rightarrow$ 策略生成。
-- **Output**: 產生三份完整報告。
-- **注意**: 若缺少訪談或競品資料，系統會自動停止並提示補齊。
+### 分析執行
 
-### 2. **單項分析 (Modular Analysis)**
-- **`/brand-user`**: **檢查訪談資料** $\rightarrow$ 分析 Pain/Gain/Jobs $\rightarrow$ 產出 `User_Insights_Report.md`。
-- **`/brand-comp`**: **檢查競品網址** $\rightarrow$ 自動爬蟲 $\rightarrow$ 3C 分析 $\rightarrow$ 產出 `Competitor_Analysis.md`。
-- **`/brand-strat`**: **檢查前兩份報告** $\rightarrow$ 尋找策略缺口 $\rightarrow$ 產出 `Final_Brand_Strategy.md`。
+| 指令 | 對應 Layer | 功能 |
+| :--- | :--- | :--- |
+| **/brand-run** | L1→L4 | 全流程引導（含每層人工確認） |
+| **/brand-user** | Layer 1 | JTBD 萃取與確認 |
+| **/brand-comp** | Layer 2 | 維度篩選與人工評分 |
+| **/brand-strat** | Layer 3-4 | 矩陣運算 + 定位選項生成 |
+| **/archive-reports** | — | 存檔目前報告 |
 
-### 3. Maintenance
-| Command | Description |
-| :--- | :--- |
-| **/archive-reports** | Moves current markdown reports to a timestamped folder in `archive/` to clear the workspace for a new iteration. |
+## 與舊版的差異
 
-## 📊 Output Artifacts
+| 項目 | v1（舊版） | v2（本版） |
+| :--- | :--- | :--- |
+| 評分者 | AI 自行打分 | 使用者打分，AI 輔助建議 |
+| 可溯源性 | 分數無依據 | 每個分數綁定證據 |
+| 可重現性 | 同輸入不同結果 | Layer 3 完全確定性 |
+| 最終產出 | 唯一策略結論 | 2-3 個選項，使用者決定 |
+| Archetype | AI 推導唯一答案 | 作為溝通語言選項呈現 |
+| 品質閘門 | 無 | 每層有明確門檻 |
+| 加權公式 | 任意係數（1.5x） | 改用分類規則，無任意係數 |
 
-The skill generates the following markdown reports:
+## 限制
 
-1.  **User_Insights_Report.md** (`stage_2_market_analysis/`)
-    -   Summary of user pains and gains (JTBD).
-    -   Key purchasing drivers.
+- 訪談品質仍取決於使用者提供的原始資料
+- 競品資訊依賴公開可查證的事實，內部營運數據無法取得
+- Bain 30 並非窮盡所有價值維度，適用於消費者導向產品/服務
+- 本工具提供結構化分析框架，不替代專業品牌顧問的經驗判斷
 
-2.  **Competitor_Analysis.md** (`stage_2_market_analysis/`)
-    -   Feature-by-feature comparison matrix.
-    -   Scoring of competitors on key attributes.
-
-3.  **Final_Brand_Strategy.md** (`stage_3_strategy_generation/`)
-    -   **3C Intersection**: Where your strengths meet customer needs and competitor weaknesses.
-    -   **Brand Archetype**: The persona that best communicates this position.
-    -   **Action Plan**: Strategic roadmap.
-
-## 🔗 Recommended Integration Scenarios
-
-Once the strategy is generated, you can combine this skill with other workflows for maximum impact:
-
-### 1. **Content Marketing Engine**
--   **Goal**: Generate high-quality, on-brand content.
--   **How**: Use `Final_Brand_Strategy.md` as the "Brand Voice" input for an AI copywriter.
--   **Prompt**: "Act as the [Archetype] defined in the strategy. Write 5 social posts about [Topic] using the identified [Brand Voice]."
-
-### 2. **Visual Identity Prototyping**
--   **Goal**: Visualize the brand's look and feel.
--   **How**: Extract "Mood Board Keywords" from the strategy to drive image generation.
--   **Prompt**: "Create a landing page hero section. Style: [Keywords from Strategy]. Emphasize: [Functional Moat]."
-
-### 3. **Product Roadmap Planning**
--   **Goal**: Prioritize features that matter.
--   **How**: Use the "Max Gap" and "Opportunity Score" from `Competitor_Analysis.md` to feed into a Product Manager skill. focus on features where competitors are weak ($S_c$ is low) but user demand is high ($W_u$ is high).
-
-### 4. **Pitch Deck Generation**
--   **Goal**: Create a compelling investor story.
--   **How**: Map the 3C outputs directly to slide decks:
-    -   **Problem**: User Pain Points (`User_Insights_Report.md`)
-    -   **Competition**: Comparative Matrix (`Competitor_Analysis.md`)
-    -   **Solution**: Value Proposition (`Final_Brand_Strategy.md`)
-
-## ⚠️ Current Limitations & Roadmap
-
--   **Crawler**: The crawler (`competitor_crawler.py`) uses Playwright to handle dynamic websites, but may still be blocked by strict anti-bot measures (e.g., Cloudflare).
--   **Data Persistence**: Relies on file-based storage. Ensure you do not manually delete files in `stage_X` folders while an analysis is in progress.
--   **Context Limit**: Very large interview transcripts may need to be summarized before import.
-
----
-*Documentation updated on: 2026-02-14*
+Documentation updated on: 2026-03-22
